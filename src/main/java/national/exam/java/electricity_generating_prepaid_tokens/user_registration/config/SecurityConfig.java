@@ -1,4 +1,4 @@
-package national.exam.java.electricity_generating_prepaid_tokens.config;
+package national.exam.java.electricity_generating_prepaid_tokens.user_registration.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

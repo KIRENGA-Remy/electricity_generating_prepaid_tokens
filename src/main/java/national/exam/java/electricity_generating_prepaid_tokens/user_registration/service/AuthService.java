@@ -11,9 +11,8 @@ import national.exam.java.electricity_generating_prepaid_tokens.user_registratio
 import national.exam.java.electricity_generating_prepaid_tokens.user_registration.Role;
 import national.exam.java.electricity_generating_prepaid_tokens.user_registration.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,12 +21,12 @@ import java.util.Optional;
 @Service
 public class AuthService {
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private  final PasswordResetTokenRepository passwordResetTokenRepository;
 
     public AuthService(
             UserRepository userRepository,
-            BCryptPasswordEncoder passwordEncoder,
+            PasswordEncoder passwordEncoder,
             PasswordResetTokenRepository passwordResetTokenRepository){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -136,12 +135,11 @@ public class AuthService {
             PasswordResetToken resetToken = new PasswordResetToken();
             resetToken.setToken(token);
             resetToken.setUser(optionalUser.get());
-            resetToken.setExpiryDate(LocalDateTime.now().plusMinutes(15)); // 15 min expiry
+            resetToken.setExpiryDate(LocalDateTime.now().plusHours(1));
 
             passwordResetTokenRepository.save(resetToken);
 
-            // In real app, send email with this token
-            System.out.println("Reset Token: " + token); // Simulate sending via email
+            System.out.println("Reset Token: " + token);
 
             return ResponseEntity.ok("Password reset token generated. Check your email.");
         }
