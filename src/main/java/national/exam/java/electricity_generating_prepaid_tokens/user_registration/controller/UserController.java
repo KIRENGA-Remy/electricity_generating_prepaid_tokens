@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
-@Tag(name = "EUCL Electricity Generating Prepaid Tokens", description = "User authentication, password reset, and management operations")
+@Tag(name = "EUCL Prepaid Token System", description = "Energy Utility Corporation Limited (EUCL) prepaid token system with user authentication, password reset, and management operations")
 public class UserController {
     private final AuthService authService;
 
