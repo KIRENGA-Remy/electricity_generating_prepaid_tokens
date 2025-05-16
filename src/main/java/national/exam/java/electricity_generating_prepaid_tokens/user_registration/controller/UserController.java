@@ -19,6 +19,11 @@ public class UserController {
         this.authService = authService;
     }
 
+    @GetMapping("/test")
+    public String test() {
+        return "Public route working!";
+    }
+
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody RegisterRequest registerRequest) {
         return authService.register(registerRequest);
