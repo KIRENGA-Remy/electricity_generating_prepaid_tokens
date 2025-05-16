@@ -37,6 +37,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Validation error or email already taken")
     })
     public ResponseEntity<String> registerUser(@RequestBody RegisterRequest registerRequest) {
+        System.out.println("Received request: " + registerRequest);
         return authService.register(registerRequest);
     }
     @PostMapping("/login")
