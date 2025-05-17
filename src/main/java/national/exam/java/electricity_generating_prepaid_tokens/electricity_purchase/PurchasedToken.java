@@ -4,11 +4,11 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import national.exam.java.electricity_generating_prepaid_tokens.meter_number_management.MeterNumber;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "purchased_tokens")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,8 +16,9 @@ public class PurchasedToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, length = 6)
-    private String meter_number;
+    @JoinColumn(nullable = false, name = "meter_number")
+    @ManyToOne
+    private MeterNumber meterNumber;
     @Column(nullable = false, unique = true, length = 16)
     private String token;
     @Enumerated(EnumType.STRING)
