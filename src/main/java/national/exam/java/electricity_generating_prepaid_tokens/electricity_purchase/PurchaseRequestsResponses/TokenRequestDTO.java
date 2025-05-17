@@ -1,6 +1,7 @@
 package national.exam.java.electricity_generating_prepaid_tokens.electricity_purchase.PurchaseRequestsResponses;
 
 
+import national.exam.java.electricity_generating_prepaid_tokens.meter_number_management.MeterNumber;
 
 public class TokenRequestDTO {
     private String meter_number;

@@ -10,8 +10,8 @@ import java.util.Optional;
 
 @Repository
 public interface MeterNumberRepository extends JpaRepository<MeterNumber,Long> {
-    MeterNumber findByNumber(String number);
+    Optional<MeterNumber> findByNumber(String number);
 
     List<MeterNumber> findByUserId(Long userId);
-    boolean existsByMeterNumber(String meterNumber);
+    boolean existsByNumber(String number);
 }

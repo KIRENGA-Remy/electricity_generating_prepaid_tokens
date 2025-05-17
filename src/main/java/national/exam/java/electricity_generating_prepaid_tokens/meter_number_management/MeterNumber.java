@@ -17,7 +17,7 @@ public class MeterNumber {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true, nullable = false)
+    @Column(name = "number", nullable = false, length = 6)
     private String number;
     @ToString.Exclude
     @ManyToOne

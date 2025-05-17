@@ -1,4 +1,5 @@
-package national.exam.java.electricity_generating_prepaid_tokens.user_registration.config;
+package national.exam.java.electricity_generating_prepaid_tokens.config;
+
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -16,3 +17,4 @@ public class SwaggerConfig {
                         .description("RESTful API for managing user authentication and password recovery"));
     }
 }
+
