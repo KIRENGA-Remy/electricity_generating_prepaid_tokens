@@ -2,6 +2,7 @@ package national.exam.java.electricity_generating_prepaid_tokens.electricity_pur
 
 import national.exam.java.electricity_generating_prepaid_tokens.electricity_purchase.PurchaseRequestsResponses.TokenRequestDTO;
 import national.exam.java.electricity_generating_prepaid_tokens.electricity_purchase.PurchaseRequestsResponses.TokenResponseDTO;
+import national.exam.java.electricity_generating_prepaid_tokens.electricity_purchase.PurchaseRequestsResponses.TokenValidationDTO;
 import national.exam.java.electricity_generating_prepaid_tokens.electricity_purchase.PurchasedToken;
 import national.exam.java.electricity_generating_prepaid_tokens.electricity_purchase.Repository.PurchasedTokenRepository;
 import national.exam.java.electricity_generating_prepaid_tokens.electricity_purchase.TokenStatus;
@@ -62,5 +63,49 @@ public class TokenService {
 
     public List<PurchasedToken> getTokenHistory(String meterNumber){
         return purchasedTokenRepository.findByMeterNumber(meterNumber);
+    }
+
+    public static String formatToken(String token) {
+        if (token.length() != 16) {
+            throw new IllegalArgumentException("Token must be 16 digits");
+        }
+        return token.replaceAll("(.{4})", "$1-").substring(0, 19); // add hyphens every 4 digits
+    }
+
+
+    public TokenValidationDTO validateToken(String rawToken) {
+        String token = rawToken.replaceAll("-", "");
+
+        if (token.length() != 16 || !token.matches("\\d+")) {
+                throw new IllegalArgumentException("Invalid token format");
+        }
+
+        PurchasedToken dbToken = purchasedTokenRepository.findByToken(token);
+        if (dbToken == null) {
+            throw new IllegalArgumentException("Token not found");
+        }
+
+        if (dbToken.getTokenStatus() == TokenStatus.USED) {
+            throw new IllegalArgumentException("Token already used");
+        }
+
+        if (isTokenExpired(dbToken)) {
+            dbToken.setTokenStatus(TokenStatus.EXPIRED);
+            purchasedTokenRepository.save(dbToken);
+            throw new IllegalArgumentException("Token has expired");
+        }
+
+        return new TokenValidationDTO(
+                formatToken(token),
+                dbToken.getTokenValueDays(),
+                dbToken.getMeter_number(),
+                dbToken.getPurchasedDate(),
+                dbToken.getAmount()
+        );
+    }
+
+    private boolean isTokenExpired(PurchasedToken token) {
+        LocalDateTime expiryDate = token.getPurchasedDate().plusDays(token.getTokenValueDays());
+        return LocalDateTime.now().isAfter(expiryDate);
     }
 }

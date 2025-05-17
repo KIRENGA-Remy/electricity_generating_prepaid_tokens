@@ -8,6 +8,9 @@ import java.util.List;
 
 @Repository
 public interface PurchasedTokenRepository extends JpaRepository<PurchasedToken, Long> {
+    PurchasedToken finfByToken(String token);
     List<PurchasedToken> findByMeterNumber(String meterNumber);
     boolean existsByToken(String token);
+
+    PurchasedToken findByToken(String token);
 }

@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import national.exam.java.electricity_generating_prepaid_tokens.electricity_purchase.PurchaseRequestsResponses.TokenRequestDTO;
 import national.exam.java.electricity_generating_prepaid_tokens.electricity_purchase.PurchaseRequestsResponses.TokenResponseDTO;
+import national.exam.java.electricity_generating_prepaid_tokens.electricity_purchase.PurchaseRequestsResponses.TokenValidationDTO;
 import national.exam.java.electricity_generating_prepaid_tokens.electricity_purchase.PurchasedToken;
 import national.exam.java.electricity_generating_prepaid_tokens.electricity_purchase.Service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +34,16 @@ public class TokenController {
     @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
     public List<PurchasedToken> getTokenHistory(@PathVariable String meterNumber) {
         return tokenService.getTokenHistory(meterNumber);
+    }
+
+    // Validate a single token
+    @GetMapping("/validate")
+    @Operation(summary = "Validate token and view details", responses = {
+            @ApiResponse(responseCode = "200", description = "Valid token"),
+            @ApiResponse(responseCode = "400", description = "Invalid or expired token")
+    })
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
+    public TokenValidationDTO validateToken(@RequestParam String token) {
+        return tokenService.validateToken(token);
     }
 }
